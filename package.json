@@ -1,0 +1,5 @@
+{
+  "name": "opsworks-custom-ruby",
+  "private": true,
+  "dependencies": {}
+}
