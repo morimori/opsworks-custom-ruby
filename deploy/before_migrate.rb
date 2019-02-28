@@ -82,7 +82,14 @@ node[:deploy].each do |application, deploy|
     group deploy[:group]
   end
 
-  gem_package 'bundler'
+  bash "install bundler" do
+    code <<-EOS
+      BUNDLER_VERSION=$(grep -A1 '^BUNDLED WITH' Gemfile.lock | tail -n1)
+      gem install bundler -v "${BUNDLER_VERSION}" --no-document
+    EOS
+    user deploy[:user]
+    group deploy[:group]
+  end
 
   bash 'bundle install' do
     code "bundle install --path #{deploy[:home]}/.bundler/#{application} --without=#{deploy[:ignore_bundler_groups].join(' ')}"
